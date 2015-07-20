@@ -177,10 +177,21 @@
     }
     // dragging
     else if (gesture.state == UIGestureRecognizerStateChanged) {
-        // update position of the drag view
-        // don't let it go past the top or the bottom too far
-        if (location.y >= 0 && location.y <= self.contentSize.height + 50) {
+        // update position of the drag view        
+        //don't let it change section!
+        
+        CGFloat minY = [self rectForSection:self.initialIndexPath.section].origin.y;
+        CGFloat maxY = [self rectForSection:self.initialIndexPath.section].origin.y + [self rectForSection:self.initialIndexPath.section].size.height;
+        
+        if (location.y >= minY && location.y <= maxY) {
             draggingView.center = CGPointMake(self.center.x, location.y);
+        } else {
+            if (location.y < minY) {
+                draggingView.center = CGPointMake(self.center.x, minY);
+            } else {
+                draggingView.center = CGPointMake(self.center.x, maxY);
+            }
+            return;
         }
         
         CGRect rect = self.bounds;
@@ -283,7 +294,7 @@
     }
 }
 
-- (void)scrollTableWithCell:(NSTimer *)timer {    
+- (void)scrollTableWithCell:(NSTimer *)timer {
     UILongPressGestureRecognizer *gesture = self.longPress;
     CGPoint location  = [gesture locationInView:self];
     
@@ -292,16 +303,26 @@
     
     if (newOffset.y < -self.contentInset.top) {
         newOffset.y = -self.contentInset.top;
-    } else if (self.contentSize.height + self.contentInset.bottom < self.frame.size.height) {
+    } else if (self.contentSize.height + self.contentInset.top < self.frame.size.height) {
         newOffset = currentOffset;
-    } else if (newOffset.y > (self.contentSize.height + self.contentInset.bottom) - self.frame.size.height) {
-        newOffset.y = (self.contentSize.height + self.contentInset.bottom) - self.frame.size.height;
+    } else if (newOffset.y > (self.contentSize.height + self.contentInset.top) - self.frame.size.height) {
+        newOffset.y = (self.contentSize.height + self.contentInset.top) - self.frame.size.height;
     }
     
     [self setContentOffset:newOffset];
     
-    if (location.y >= 0 && location.y <= self.contentSize.height + 50) {
+    CGFloat minY = [self rectForSection:self.initialIndexPath.section].origin.y;
+    CGFloat maxY = [self rectForSection:self.initialIndexPath.section].origin.y + [self rectForSection:self.initialIndexPath.section].size.height;
+    
+    if (location.y >= minY && location.y <= maxY) {
         draggingView.center = CGPointMake(self.center.x, location.y);
+    } else {
+        if (location.y < minY) {
+            draggingView.center = CGPointMake(self.center.x, minY);
+        } else {
+            draggingView.center = CGPointMake(self.center.x, maxY);
+        }
+        return;
     }
     
     [self updateCurrentLocation:gesture];
