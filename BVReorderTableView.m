@@ -301,12 +301,14 @@
     CGPoint currentOffset = self.contentOffset;
     CGPoint newOffset = CGPointMake(currentOffset.x, currentOffset.y + self.scrollRate * 10);
     
+    if (self.contentSize.height + self.contentInset.top < self.frame.size.height) {
+        newOffset = currentOffset;
+    } else if (newOffset.y > (self.contentSize.height + self.contentInset.bottom) - self.frame.size.height) {
+        newOffset.y = (self.contentSize.height + self.contentInset.bottom) - self.frame.size.height;
+    }
+    
     if (newOffset.y < -self.contentInset.top) {
         newOffset.y = -self.contentInset.top;
-    } else if (self.contentSize.height + self.contentInset.top < self.frame.size.height) {
-        newOffset = currentOffset;
-    } else if (newOffset.y > (self.contentSize.height + self.contentInset.top) - self.frame.size.height) {
-        newOffset.y = (self.contentSize.height + self.contentInset.top) - self.frame.size.height;
     }
     
     [self setContentOffset:newOffset];
