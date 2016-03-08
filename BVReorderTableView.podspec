@@ -8,8 +8,8 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   
   s.author = 'Mark Trubnikov'
-  s.homepage = ''
+  s.homepage = 'https://github.com/mtrubnikov/BVReorderTableView'
   s.source = { :git => "https://github.com/mtrubnikov/BVReorderTableView.git" }
-  s.summary = ''
+  s.summary = 'BVReorderTableView'
   
 end
