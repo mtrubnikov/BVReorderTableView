@@ -7,9 +7,9 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '6.0'
   s.requires_arc = true
   
-  s.authors = ''
+  s.author = 'Mark Trubnikov'
   s.homepage = ''
-  s.source = ''
+  s.source = { :git => "https://github.com/mtrubnikov/BVReorderTableView.git" }
   s.summary = ''
   
 end
